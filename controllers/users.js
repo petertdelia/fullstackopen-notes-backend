@@ -4,7 +4,6 @@ const usersRouter = require('express').Router();
 
 usersRouter.post('/', async (req, res) => {
   const body = req.body;
-  console.log(body);
 
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(body.password, saltRounds);
@@ -21,7 +20,8 @@ usersRouter.post('/', async (req, res) => {
 });
 
 usersRouter.get('/', async (req, res) => {
-  const users = await User.find({});
+  const users = await User
+    .find({}).populate('notes', { content: 1, date: 1 });
   res.json(users);
 });
 
